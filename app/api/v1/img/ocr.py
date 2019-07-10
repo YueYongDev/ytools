@@ -10,11 +10,11 @@ from flask import request, jsonify
 from app.api.v1.img import img
 from app.model.res import Res
 from app.utils.common_utils import get_date_now
-from app.utils.ocr.ocr_utils import ocr_by_baidu
+from app.utils.image.ocr.ocr_utils import ocr_by_baidu
 
 __author__ = 'lyy'
 
-path = os.getcwd() + '/app/utils/ocr'
+path = os.getcwd() + '/app/utils/image/ocr'
 
 
 # OCR 文字识别
@@ -31,13 +31,11 @@ def ocr():
 
     status = 200
     msg = '文字识别成功'
-    info = [
-        {
-            'query_time': get_date_now(),
-            'finish_time': (end - start).seconds,
-            'result': result
-        }
-    ]
+    info = {
+        'query_time': get_date_now(),
+        'finish_time': (end - start).seconds,
+        'result': result
+    }
 
     res_json = Res(status, msg, info)
 

@@ -12,12 +12,7 @@ from flask import Blueprint, request, jsonify
 # 定义一个蓝图
 user = Blueprint('user', __name__)
 
-from app.api.v1.user import feedback, logd, login, net_speed
-
-
-@user.route('/')
-def say_hello():
-    return '这里是用户处理类的接口'
+from app.api.v1.user import feedback, logd, login
 
 
 @user.route('/ip')
@@ -32,12 +27,10 @@ def get_ip():
 
     status = 200
 
-    info = [
-        {
-            'ip': ip,
-            'created_time': get_date_now()
-        }
-    ]
+    info = {
+        'ip': ip,
+        'created_time': get_date_now()
+    }
     msg = 'IP获取成功'
 
     res_json = Res(status, msg, info)

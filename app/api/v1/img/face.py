@@ -9,12 +9,12 @@ from app.api.v1.img import img
 from app.model import db
 from app.model.face import Face
 from app.model.res import Res
-from app.utils.ai_face_beauty.ai_face_beauty import faceIdentity
+from app.utils.image.face.ai_face_beauty import faceIdentity
 from app.utils.common_utils import get_date_now, upload_file_to_qiniu, get_ran_dom
 
 __author__ = 'lyy'
 
-path = os.getcwd() + '/app/utils/ai_face_beauty'
+path = os.getcwd() + '/app/utils/image/face'
 
 executor = ThreadPoolExecutor(1)
 
@@ -70,13 +70,11 @@ def face_mark():
 
     end = datetime.datetime.now()
 
-    info = [
-        {
-            'query_time': get_date_now(),
-            'finish_time': (end - start).seconds,
-            'result': result
-        }
-    ]
+    info = {
+        'query_time': get_date_now(),
+        'finish_time': (end - start).seconds,
+        'result': result
+    }
 
     res_json = Res(status, msg, info)
 
@@ -149,13 +147,11 @@ def human_face():
 
     end = datetime.datetime.now()
 
-    info = [
-        {
-            'query_time': get_date_now(),
-            'finish_time': (end - start).seconds,
-            'result': result
-        }
-    ]
+    info = {
+        'query_time': get_date_now(),
+        'finish_time': (end - start).seconds,
+        'result': result
+    }
 
     res_json = Res(status, msg, info)
 

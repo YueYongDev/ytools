@@ -9,13 +9,13 @@ from flask import request, jsonify
 from app.api.v1.song import song
 from app.model.res import Res
 from app.utils.common_utils import get_date_now, serialize
-from app.utils.download_song.qq_music import get_song_by_text
+from app.utils.song.download.qq_music import get_song_by_text
 
 __author__ = 'lyy'
 
 
 @song.route('/qq/download', methods=['POST'])
-def download_qq_song():
+def qq_download():
     text = request.form['text']
 
     start = datetime.datetime.now()
@@ -28,14 +28,12 @@ def download_qq_song():
         if song.id > 0:
             status = 200
             msg = '音乐获取成功'
-            info = [
-                {
-                    'text': text,
-                    'song': serialize(song),
-                    'created_time': get_date_now(),
-                    'finish_time': (end - start).seconds
-                }
-            ]
+            info = {
+                'text': text,
+                'song': serialize(song),
+                'created_time': get_date_now(),
+                'finish_time': (end - start).seconds
+            }
 
             res_json = Res(status, msg, info)
 
@@ -43,14 +41,12 @@ def download_qq_song():
     else:
         status = 404
         msg = '未找到资源，请联系管理员'
-        info = [
-            {
-                'text': text,
-                'song': '',
-                'created_time': get_date_now(),
-                'finish_time': (end - start).seconds
-            }
-        ]
+        info = {
+            'text': text,
+            'song': '',
+            'created_time': get_date_now(),
+            'finish_time': (end - start).seconds
+        }
 
         res_json = Res(status, msg, info)
 

@@ -50,12 +50,10 @@ def feedback():
 
     status = 200
     msg = '反馈成功'
-    info = [
-        {
-            'id': feedback.id,
-            'created_time': get_date_now()
-        }
-    ]
+    info = {
+        'id': feedback.id,
+        'created_time': get_date_now()
+    }
 
     # 如果反馈成功，异步发送邮件
     if feedback.id > 0:

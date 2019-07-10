@@ -10,11 +10,11 @@ from flask import request, jsonify
 from app.api.v1.img import img
 from app.model.res import Res
 from app.utils.common_utils import get_date_now
-from app.utils.stylize.create_stylize_photo import change_style
+from app.utils.image.stylize.create_stylize_photo import change_style
 
 __author__ = 'lyy'
 
-path = os.getcwd() + '/app/utils/stylize'
+path = os.getcwd() + '/app/utils/image/stylize'
 
 
 @img.route('/stylize/create', methods=['POST'])
@@ -33,13 +33,11 @@ def create_style_changed_img():
 
     status = 200
     msg = '图片生成成功'
-    info = [
-        {
-            'img_url': img_url,
-            'created_time': get_date_now(),
-            'finish_time': (end - start).seconds
-        }
-    ]
+    info = {
+        'img_url': img_url,
+        'created_time': get_date_now(),
+        'finish_time': (end - start).seconds
+    }
 
     res_json = Res(status, msg, info)
 

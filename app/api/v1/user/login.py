@@ -53,12 +53,10 @@ def user_login():
 
     status = 200
 
-    info = [
-        {
-            'id': record_id,
-            'created_time': get_date_now()
-        }
-    ]
+    info = {
+        'id': record_id,
+        'created_time': get_date_now()
+    }
 
     res_json = Res(status, record_msg, info)
     return jsonify(res_json.__dict__)

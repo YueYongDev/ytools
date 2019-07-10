@@ -50,12 +50,10 @@ def logd():
 
     status = 200
     msg = '记录成功'
-    info = [
-        {
-            'id': log.id,
-            'created_time': get_date_now()
-        }
-    ]
+    info = {
+        'id': log.id,
+        'created_time': get_date_now()
+    }
 
     res_json = Res(status, msg, info)
 

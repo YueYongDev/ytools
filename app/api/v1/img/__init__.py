@@ -2,10 +2,8 @@
 '''
   Created by lyy on 2019-04-19
 '''
-from qiniu import Auth
-
-from app.utils.common_utils import get_ran_dom
 from flask import jsonify
+from qiniu import Auth
 
 __author__ = 'lyy'
 
@@ -14,7 +12,7 @@ from flask import Blueprint
 # 定义一个蓝图
 img = Blueprint('img', __name__)
 
-from app.api.v1.img import ph_logo, stylize, image_classify, ocr, face, wordcloud_song, one_share
+from app.api.v1.img import ph_logo, stylize, classify, ocr, face, one
 
 
 @img.route('/')

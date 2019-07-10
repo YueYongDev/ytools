@@ -9,7 +9,7 @@ __author__ = 'lyy'
 class Res:
     status = 200
     msg = ''
-    info = []
+    info = {}
 
     def __init__(self, status, msg, info):
         self.status = status

@@ -24,15 +24,13 @@ def translate():
 
     status = 200
     msg = '翻译成功'
-    info = [
-        {
-            'query': query,
-            'from': word_from,
-            'to': word_to,
-            'result': result["trans_result"],
-            'query_time': get_date_now()
-        }
-    ]
+    info = {
+        'query': query,
+        'from': word_from,
+        'to': word_to,
+        'result': result["trans_result"],
+        'query_time': get_date_now()
+    }
 
     res_json = Res(status, msg, info)
 
