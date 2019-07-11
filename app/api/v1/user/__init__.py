@@ -2,6 +2,8 @@
 '''
   Created by lyy on 2019-04-19
 '''
+import json
+
 from app.model.res import Res
 from app.utils.common_utils import get_date_now, get_ip_info
 
@@ -39,16 +41,21 @@ def get_ip():
 
 @user.route('/ip/info', methods=['POST'])
 def get_ip_info_from_api():
-    ip = request.form['ip']
+    try:
+        ip = request.form['ip']
+        ip_info = get_ip_info(ip)
+        status = 200
 
-    status = 200
-
-    info = {
-        'ip': ip,
-        'result': get_ip_info(ip),
-        'created_time': get_date_now()
-    }
-    msg = 'IP获取成功'
+        info = {
+            'ip': ip,
+            'result': ip_info,
+            'created_time': get_date_now()
+        }
+        msg = 'IP获取成功'
+    except Exception:
+        status = 500
+        info = {}
+        msg = 'IP获取失败'
 
     res_json = Res(status, msg, info)
     return jsonify(res_json.__dict__)

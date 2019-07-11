@@ -62,15 +62,18 @@ def user_login():
 
 
 def add_log(uid, ip):
-    ip_info = get_ip_info(ip)['data']
-    country = ip_info['country']
-    region = ip_info['region']
-    city = ip_info['city']
-    isp = ip_info['isp']
+    try:
+        ip_info = get_ip_info(ip)['data']
+        country = ip_info['country']
+        region = ip_info['region']
+        city = ip_info['city']
+        isp = ip_info['isp']
 
-    log = Log(uid, ip, country, region, city, isp)
-    db.session.add(log)
-    db.session.commit()
+        log = Log(uid, ip, country, region, city, isp)
+        db.session.add(log)
+        db.session.commit()
+    except Exception as e:
+        print(e)
 
 
 # 判断用户是否存在
@@ -98,9 +101,3 @@ def update(uid):
         return user.id
     else:
         return 0
-
-# # 获取这个ip地址的详细信息
-# def get_ip_info(ip):
-#     url = 'http://ip.taobao.com/service/getIpInfo.php?ip=' + ip
-#     r = requests.get(url)
-#     return r.json()

@@ -38,30 +38,33 @@ def logd():
     except Exception as e:
         print(e)
 
-    ip_info = get_ip_info(ip)['data']
-    country = ip_info['country']
-    region = ip_info['region']
-    city = ip_info['city']
-    isp = ip_info['isp']
+    try:
+        ip_info = get_ip_info(ip)['data']
+        country = ip_info['country']
+        region = ip_info['region']
+        city = ip_info['city']
+        isp = ip_info['isp']
 
-    log = Log(uid, ip, country, region, city, isp)
-    db.session.add(log)
-    db.session.commit()
+        log = Log(uid, ip, country, region, city, isp)
+        db.session.add(log)
+        db.session.commit()
 
-    status = 200
-    msg = '记录成功'
-    info = {
-        'id': log.id,
-        'created_time': get_date_now()
-    }
+        status = 200
+        msg = '记录成功'
+        info = {
+            'id': log.id,
+            'created_time': get_date_now()
+        }
 
-    res_json = Res(status, msg, info)
+        res_json = Res(status, msg, info)
 
-    return jsonify(res_json.__dict__)
+        return jsonify(res_json.__dict__)
+    except Exception as e:
+        print(e)
+        status = 500
+        msg = '记录失败'
+        info = {}
 
+        res_json = Res(status, msg, info)
 
-# # 获取这个ip地址的详细信息
-# def get_ip_info(ip):
-#     url = 'http://ip.taobao.com/service/getIpInfo.php?ip=' + ip
-#     r = requests.get(url)
-#     return r.json()
+        return jsonify(res_json.__dict__)

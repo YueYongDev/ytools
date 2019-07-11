@@ -3,7 +3,6 @@
   Created by lyy on 2019-04-04
 '''
 
-
 __author__ = 'lyy'
 from flask import render_template, jsonify
 from app.model.res import Res
@@ -19,7 +18,7 @@ def index():
 
 # 捕获404异常
 @app.errorhandler(404)
-def internal_server_error(e):
+def error_404(e):
     status = 404
     msg = '服务器搬家了'
     info = ''
@@ -28,11 +27,11 @@ def internal_server_error(e):
 
 
 # 捕获500异常
-@app.errorhandler(500)
-def internal_server_error(e):
+@app.errorhandler(Exception)
+def error_500(e):
     status = 500
     msg = '服务器罢工了，请联系管理员'
-    info = ''
+    info = {}
     res_json = Res(status, msg, info)
     return jsonify(res_json.__dict__)
 

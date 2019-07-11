@@ -36,49 +36,53 @@ def save_face(uid, filepath, face_age, face_gender, face_beauty):
 # 测颜值
 @img.route('/face/mark', methods=['POST'])
 def face_mark():
-    start = datetime.datetime.now()
-    uid = request.form['uid']
-    img = request.files.get('img')
-    save_path = path + '/temp/' + 'face.jpg'
-    img.save(save_path)
+    try:
+        start = datetime.datetime.now()
+        uid = request.form['uid']
+        img = request.files.get('img')
+        save_path = path + '/temp/' + 'face.jpg'
+        img.save(save_path)
 
-    result = faceIdentity(save_path)
+        result = faceIdentity(save_path)
 
-    if result['error_code'] == 222304 or result['error_code'] == 222204:
+        if result['error_code'] == 222304 or result['error_code'] == 222204:
+            status = 500
+            err_msg = '图片过大'
+        elif result['error_code'] == 222202:
+            status = 500
+            err_msg = '没有发现人脸'
+        elif result['error_code'] is not 0:
+            status = 500
+            err_msg = '服务器异常'
+        else:
+            save_face_to_db(result, uid, save_path)
+
+            status = 200
+            msg = '颜值打分成功'
+
+            end = datetime.datetime.now()
+
+            info = {
+                'query_time': get_date_now(),
+                'finish_time': (end - start).seconds,
+                'result': result['result']
+            }
+            res_json = Res(status, msg, info)
+            return jsonify(res_json.__dict__)
+
+        info = {}
+        res_json = Res(status, err_msg, info)
+        return jsonify(res_json.__dict__)
+
+    except Exception as e:
+        print(e)
         status = 500
-        err_msg = '图片过大'
-    elif result['error_code'] == 222202:
-        status = 500
-        err_msg = '没有发现人脸'
-    elif result['error_code'] is not 0:
-        status = 500
-        err_msg = '服务器异常'
-    else:
-        status = 200
-        err_msg = '颜值打分成功'
+        info = {}
+        msg = '服务器罢工了，请联系管理员'
 
-    # 如果识别成功，就将人脸信息保存到数据库中(异步)
-    if status == 200:
-        result = result['result']
-        face_age = result['face_list'][0]['age']
-        face_gender = result['face_list'][0]['gender']['type']
-        face_beauty = result['face_list'][0]['beauty']
-        # save_face(uid, save_path, face_age, face_gender, face_beauty)
-        executor.submit(save_face, uid, save_path, face_age, face_gender, face_beauty)
+        res_json = Res(status, msg, info)
 
-    msg = err_msg
-
-    end = datetime.datetime.now()
-
-    info = {
-        'query_time': get_date_now(),
-        'finish_time': (end - start).seconds,
-        'result': result
-    }
-
-    res_json = Res(status, msg, info)
-
-    return jsonify(res_json.__dict__)
+        return jsonify(res_json.__dict__)
 
 
 # 返回一定数量的人脸数据
@@ -97,6 +101,16 @@ def get_face():
     return jsonify(res_json.__dict__)
 
 
+# 将人脸数据存到数据库(异步)
+def save_face_to_db(result, uid, save_path):
+    result = result['result']
+    face_age = result['face_list'][0]['age']
+    face_gender = result['face_list'][0]['gender']['type']
+    face_beauty = result['face_list'][0]['beauty']
+    # save_face(uid, save_path, face_age, face_gender, face_beauty)
+    executor.submit(save_face, uid, save_path, face_age, face_gender, face_beauty)
+
+
 # 配合多个对象使用的函数
 def to_json(all_vendors):
     v = [ven.dobule_to_dict() for ven in all_vendors]
@@ -108,51 +122,3 @@ def get_face_by_page(page):
     index = [i for i in range(page * 20 - 19, page * 20)]
     faces = Face.query.filter(Face.id.in_(index)).all()
     return faces
-
-
-# 即将舍弃
-@img.route('/identify/humanface', methods=['POST'])
-def human_face():
-    start = datetime.datetime.now()
-    uid = request.form['uid']
-    img = request.files.get('img')
-    save_path = path + '/temp/' + 'face.jpg'
-    img.save(save_path)
-
-    result = faceIdentity(save_path)
-
-    if result['error_code'] == 222304 or result['error_code'] == 222204:
-        status = 500
-        err_msg = '图片过大'
-    elif result['error_code'] == 222202:
-        status = 500
-        err_msg = '没有发现人脸'
-    elif result['error_code'] is not 0:
-        status = 500
-        err_msg = '服务器异常'
-    else:
-        status = 200
-        err_msg = '颜值打分成功'
-
-    # 如果识别成功，就将人脸信息保存到数据库中(异步)
-    if status == 200:
-        result = result['result']
-        face_age = result['face_list'][0]['age']
-        face_gender = result['face_list'][0]['gender']['type']
-        face_beauty = result['face_list'][0]['beauty']
-        # save_face(uid, save_path, face_age, face_gender, face_beauty)
-        executor.submit(save_face, uid, save_path, face_age, face_gender, face_beauty)
-
-    msg = err_msg
-
-    end = datetime.datetime.now()
-
-    info = {
-        'query_time': get_date_now(),
-        'finish_time': (end - start).seconds,
-        'result': result
-    }
-
-    res_json = Res(status, msg, info)
-
-    return jsonify(res_json.__dict__)
