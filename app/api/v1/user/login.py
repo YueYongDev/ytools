@@ -4,7 +4,6 @@
 '''
 import json
 
-import requests
 from flask import request, jsonify
 
 from app.api.v1.user import user
@@ -13,7 +12,7 @@ from app.model.log import Log
 from app.model.res import Res
 from app.model.user import User
 from app.utils import common_utils
-from app.utils.common_utils import get_date_now
+from app.utils.common_utils import get_date_now, get_ip_info
 
 __author__ = 'lyy'
 
@@ -100,9 +99,8 @@ def update(uid):
     else:
         return 0
 
-
-# 获取这个ip地址的详细信息
-def get_ip_info(ip):
-    url = 'http://ip.taobao.com/service/getIpInfo.php?ip=' + ip
-    r = requests.get(url)
-    return r.json()
+# # 获取这个ip地址的详细信息
+# def get_ip_info(ip):
+#     url = 'http://ip.taobao.com/service/getIpInfo.php?ip=' + ip
+#     r = requests.get(url)
+#     return r.json()

@@ -2,11 +2,11 @@
 '''
   Created by lyy on 2019-04-04
 '''
-from app.model.res import Res
+
 
 __author__ = 'lyy'
 from flask import render_template, jsonify
-
+from app.model.res import Res
 from app import create_app
 
 app = create_app()
@@ -30,7 +30,7 @@ def internal_server_error(e):
 # 捕获500异常
 @app.errorhandler(500)
 def internal_server_error(e):
-    status = 404
+    status = 500
     msg = '服务器罢工了，请联系管理员'
     info = ''
     res_json = Res(status, msg, info)

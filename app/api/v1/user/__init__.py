@@ -3,7 +3,7 @@
   Created by lyy on 2019-04-19
 '''
 from app.model.res import Res
-from app.utils.common_utils import get_date_now
+from app.utils.common_utils import get_date_now, get_ip_info
 
 __author__ = 'lyy'
 
@@ -29,6 +29,23 @@ def get_ip():
 
     info = {
         'ip': ip,
+        'created_time': get_date_now()
+    }
+    msg = 'IP获取成功'
+
+    res_json = Res(status, msg, info)
+    return jsonify(res_json.__dict__)
+
+
+@user.route('/ip/info', methods=['POST'])
+def get_ip_info_from_api():
+    ip = request.form['ip']
+
+    status = 200
+
+    info = {
+        'ip': ip,
+        'result': get_ip_info(ip),
         'created_time': get_date_now()
     }
     msg = 'IP获取成功'

@@ -6,6 +6,7 @@
 import datetime
 import random
 
+import requests
 from qiniu import Auth, put_file, BucketManager, urlsafe_base64_encode, PersistentFop
 
 from app.setting import BASE_URL
@@ -96,6 +97,13 @@ def serialize(model):
     from sqlalchemy.orm import class_mapper
     columns = [c.key for c in class_mapper(model.__class__).columns]
     return dict((c, getattr(model, c)) for c in columns)
+
+
+# 获取某个ip地址的详细信息
+def get_ip_info(ip):
+    url = 'http://ip.taobao.com/service/getIpInfo.php?ip=' + ip
+    r = requests.get(url)
+    return r.json()
 
 
 if __name__ == '__main__':

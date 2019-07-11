@@ -10,7 +10,7 @@ from app.secure import WX_AID, WX_ASK
 
 from app.model import db
 
-from app.utils.common_utils import get_date_now
+from app.utils.common_utils import get_date_now, get_ip_info
 from app.api.v1.user import user
 from flask import request, jsonify
 
@@ -60,8 +60,8 @@ def logd():
     return jsonify(res_json.__dict__)
 
 
-# 获取这个ip地址的详细信息
-def get_ip_info(ip):
-    url = 'http://ip.taobao.com/service/getIpInfo.php?ip=' + ip
-    r = requests.get(url)
-    return r.json()
+# # 获取这个ip地址的详细信息
+# def get_ip_info(ip):
+#     url = 'http://ip.taobao.com/service/getIpInfo.php?ip=' + ip
+#     r = requests.get(url)
+#     return r.json()
