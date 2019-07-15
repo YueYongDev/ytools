@@ -6,7 +6,7 @@ from PIL import ImageDraw, Image, ImageFont
 import textwrap
 
 # 生成海报
-from app.utils.common_utils import upload_file_to_qiniu
+from app.utils.common_utils import upload_file_to_qiniu, get_ran_dom
 
 _path0 = os.getcwd()
 _path_assets = _path0 + '/app/utils/image/face/assets/'
@@ -25,8 +25,7 @@ def make_face_post(info):
         postPic=post_pic,
         qrImg=qrImg,
         info=info)
-    today = datetime.date.today().strftime('%y%m%d')
-    post_url = upload_file_to_qiniu('one_' + str(today) + '.jpg', _path_output + 'post.jpg')
+    post_url = upload_file_to_qiniu(str(get_ran_dom()) + '.jpg', _path_output + 'post.jpg')
     return post_url
 
 
