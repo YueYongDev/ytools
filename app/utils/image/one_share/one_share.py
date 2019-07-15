@@ -108,7 +108,7 @@ class PostMaker(object):
             for postTitle in para:
                 textWidth, textHeight = font.getsize(postTitle)
                 draw.text([(bg_w - textWidth) / 2, h], postTitle, font=font, fill=(0, 0, 0))
-                h += textHeight
+                h += (textHeight + 15)
 
             date = str(date).replace('-', '/')
 

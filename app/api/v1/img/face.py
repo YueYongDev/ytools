@@ -11,26 +11,13 @@ from app.model.face import Face
 from app.model.res import Res
 from app.utils.image.face.ai_face_beauty import faceIdentity
 from app.utils.common_utils import get_date_now, upload_file_to_qiniu, get_ran_dom
+from app.utils.image.face.face_share import make_face_post
 
 __author__ = 'lyy'
 
 path = os.getcwd() + '/app/utils/image/face'
 
 executor = ThreadPoolExecutor(1)
-
-
-# 保存人脸信息
-def save_face(uid, filepath, face_age, face_gender, face_beauty):
-    filename = str('face_' + get_ran_dom() + '.jpg').lower()
-    face_url = upload_file_to_qiniu(filename, filepath)
-    face = Face(uid, face_url, face_age, face_gender, face_beauty)
-    try:
-        app = create_app()
-        with app.app_context():
-            db.session.add(face)
-            db.session.commit()
-    except Exception as e:
-        print(e)
 
 
 # 测颜值
@@ -85,6 +72,28 @@ def face_mark():
         return jsonify(res_json.__dict__)
 
 
+# 生成颜值检测结果的分享图片
+@img.route('/face/share', methods=['POST'])
+def get_face_share():
+    start = datetime.datetime.now()
+    img = request.files.get('img')
+    info = request.form['info']
+    save_path = path + '/assets/' + 'base.jpg'
+    img.save(save_path)
+    post_url = make_face_post(info)
+    end = datetime.datetime.now()
+
+    status = 200
+    msg = '海报生成成功'
+    info = {
+        'query_time': get_date_now(),
+        'finish_time': (end - start).seconds,
+        'post_url': post_url
+    }
+    res_json = Res(status, msg, info)
+    return jsonify(res_json.__dict__)
+
+
 # 返回一定数量的人脸数据
 @img.route('/face/get')
 def get_face():
@@ -99,6 +108,20 @@ def get_face():
     msg = '获取成功'
     res_json = Res(status, msg, info)
     return jsonify(res_json.__dict__)
+
+
+# 保存人脸信息
+def save_face(uid, filepath, face_age, face_gender, face_beauty):
+    filename = str('face_' + get_ran_dom() + '.jpg').lower()
+    face_url = upload_file_to_qiniu(filename, filepath)
+    face = Face(uid, face_url, face_age, face_gender, face_beauty)
+    try:
+        app = create_app()
+        with app.app_context():
+            db.session.add(face)
+            db.session.commit()
+    except Exception as e:
+        print(e)
 
 
 # 将人脸数据存到数据库(异步)
