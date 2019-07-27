@@ -41,7 +41,7 @@ def write_text_on_photo(text1, text2):
 
     img.save(path + '/output/ph_logo.jpg', 'jpeg')
 
-    filename = str(text1 + '_' + text2 + '_' + get_ran_dom() + '.jpg').lower()
+    filename = str('img_' + get_ran_dom() + '.jpg').lower()
     filepath = path + '/output/ph_logo.jpg'
 
     img_url = upload_file_to_qiniu(filename, filepath)

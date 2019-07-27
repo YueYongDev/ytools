@@ -27,14 +27,14 @@ def error_404(e):
 
 
 # 捕获500异常
-@app.errorhandler(Exception)
-def error_500(e):
-    status = 500
-    msg = '服务器罢工了，请联系管理员'
-    info = {}
-    res_json = Res(status, msg, info)
-    return jsonify(res_json.__dict__)
+# @app.errorhandler(Exception)
+# def error_500(e):
+#     status = 500
+#     msg = '服务器罢工了，请联系管理员'
+#     info = {}
+#     res_json = Res(status, msg, info)
+#     return jsonify(res_json.__dict__)
 
 
 if __name__ == '__main__':
-    app.run(port=8080, debug=app.config['DEBUG'])
+    app.run(port=8000, debug=app.config['DEBUG'])

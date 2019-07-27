@@ -5,7 +5,7 @@ import textwrap
 import requests
 from PIL import ImageDraw, Image, ImageFont
 
-from app.utils.common_utils import upload_file_to_qiniu
+from app.utils.common_utils import upload_file_to_qiniu, get_ran_dom
 
 _path0 = os.getcwd()
 _path_assets = _path0 + '/app/utils/image/one_share/assets/'
@@ -26,7 +26,7 @@ def make_post():
         qrImg=qrImg,
         one_info=one_info)
     today = datetime.date.today().strftime('%y%m%d')
-    post_url = upload_file_to_qiniu('one_' + str(today) + '.jpg', _path_output + 'post.jpg')
+    post_url = upload_file_to_qiniu('one_' + get_ran_dom() + '.jpg', _path_output + 'post.jpg')
     return post_url, one_info
 
 
@@ -119,12 +119,12 @@ class PostMaker(object):
 
             kind = str(title) + " | " + str(pic_info)
             draw.text([(bg_w - font.getsize(kind)[0]) / 2, 750], kind, font=font, fill=text_color)
-
-            draw.text([(bg_w - font.getsize(words_info)[0]) / 2, 1000], words_info, font=font, fill=text_color)
+            print(words_info)
+            draw.text([(bg_w - font.getsize(words_info)[0]) / 2, h + 10], words_info, font=font, fill=text_color)
 
             qrImg = Image.open(qrImg)
             qrImg.thumbnail((200, 200))
-            backImg.paste(qrImg, (bg_w - 280, bg_h - 280))
+            backImg.paste(qrImg, (bg_w - 260, bg_h - 260))
 
             # today = datetime.date.today()
             # folder_path = 'output/' + str(today)
