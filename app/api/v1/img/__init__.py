@@ -12,7 +12,7 @@ from flask import Blueprint
 # 定义一个蓝图
 img = Blueprint('img', __name__)
 
-from app.api.v1.img import ph_logo, stylize, classify, ocr, face, one
+from app.api.v1.img import ph_logo, classify, ocr, face, one
 
 
 @img.route('/')
