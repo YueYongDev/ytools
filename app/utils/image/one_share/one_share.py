@@ -104,7 +104,11 @@ class PostMaker(object):
 
             draw = ImageDraw.Draw(backImg)
 
-            h = 850
+            text_color = (169, 169, 169)
+            kind = str(title) + " | " + str(pic_info)
+            draw.text([(bg_w - font.getsize(kind)[0]) / 2, pic_h + 220], kind, font=font, fill=text_color)
+
+            h = font.getsize(words_info)[1] + 250 + pic_h
             for postTitle in para:
                 textWidth, textHeight = font.getsize(postTitle)
                 draw.text([(bg_w - textWidth) / 2, h], postTitle, font=font, fill=(0, 0, 0))
@@ -117,9 +121,6 @@ class PostMaker(object):
 
             draw.text([(bg_w - font.getsize(date)[0]) / 2, 100], date, font=font, fill=text_color)
 
-            kind = str(title) + " | " + str(pic_info)
-            draw.text([(bg_w - font.getsize(kind)[0]) / 2, 750], kind, font=font, fill=text_color)
-            print(words_info)
             draw.text([(bg_w - font.getsize(words_info)[0]) / 2, h + 10], words_info, font=font, fill=text_color)
 
             qrImg = Image.open(qrImg)
